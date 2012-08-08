@@ -45,7 +45,7 @@
         </div>
 
         <div id="<?php echo 'pyd_vimeo_' . $pyd_vimeo_album[ 'id' ]; ?>" class="pyd_vimeo_video" style="display:none;">
-            <iframe src="http://player.vimeo.com/video/<?php echo $pyd_vimeo_album[ 'id' ]; ?>?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1&amp;wmode=transparent" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+            <iframe src="http://player.vimeo.com/video/<?php echo $pyd_vimeo_album[ 'id' ]; ?>?title=0&amp;byline=0&amp;portrait=0&amp;wmode=transparent" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
         </div>
 
         <?php
