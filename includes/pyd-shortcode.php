@@ -26,13 +26,14 @@
         );
 
         $pyd_vimeo_albums = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $albumid . '/videos.php' ) );
+        $pyd_vimeo_album_info = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $albumid . '/info.php' ) );
 
         ob_start();
 
         echo '<div class="pyd_vimeo_container pydClear">';
 
         if ( $title ) {
-            echo '<h2>' . $title . '</h2>';
+            echo '<h2>' . $pyd_vimeo_album_info['title'] . '</h2>';
         }
 
         foreach ( $pyd_vimeo_albums as $pyd_vimeo_album ) {
@@ -122,7 +123,7 @@
                         </select>
                     </p>
 
-                    <p>Display Title: <input type="checkbox" id="pyd_vimeo_video_album_title" name="title" value="<?php echo $pyd_vimeo_album_id[ 'title' ]; ?>" /></p>
+                    <p>Display Title: <input type="checkbox" id="pyd_vimeo_video_album_title" name="title" value="1" /></p>
                 </div>
                 <div style="padding:15px;">
                     <input type="button" class="button-primary" value="Insert Vimeo Videos"
