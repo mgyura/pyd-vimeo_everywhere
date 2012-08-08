@@ -1,8 +1,8 @@
 <?php
     /*
-     Plugin Name: Vimeo Albums Display
+     Plugin Name: Vimeo Videos Display
      Plugin URI: http://pokayoke.co
-     Description: Creates a shortcode for displaying a group of videos from your Vimeo albums.
+     Description: Creates a shortcode for displaying videos from your Vimeo account.  Adds a tab to your import media button on pages and posts.
      Version: 1.00
      Author: Michael Gyura
      Author URI: http://gyura.com
