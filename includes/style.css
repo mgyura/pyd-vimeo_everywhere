@@ -1,0 +1,13 @@
+/*
+PYD Vimeo Albums CSS
+Michael Gyura of Poka Yoke Design
+*/
+
+
+.pyd_vimeo_videos {
+    width: 200px;
+    height: 250px;
+    float: left;
+    padding: 10px;
+    text-align: center;
+}
