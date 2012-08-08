@@ -76,6 +76,7 @@
     $pyd_vimeo_username = get_option( 'pyd_vimeo_videos' );
 
 
+
     /*-----------------------------------------------------------------------------------*/
     /* Admin Message when plugin needs to be authorized by SmugMug */
     /*-----------------------------------------------------------------------------------*/
