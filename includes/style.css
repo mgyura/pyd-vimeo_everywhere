@@ -11,3 +11,9 @@ Michael Gyura of Poka Yoke Design
     padding: 10px;
     text-align: center;
 }
+#TB_window {
+    z-index: 99999;
+}
+.pydClear {
+    clear: both;
+}

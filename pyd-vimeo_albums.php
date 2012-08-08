@@ -48,6 +48,9 @@
             return;
         }
 
+        wp_enqueue_style( 'thickbox' );
         wp_enqueue_style( 'pydviemoalbumsscript' );
+        wp_enqueue_script( 'jquery' );
+        wp_enqueue_script( 'thickbox' );
 
     }
