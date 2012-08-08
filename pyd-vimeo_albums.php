@@ -30,6 +30,7 @@
     /*-----------------------------------------------------------------------------------*/
 
     require_once( dirname( __FILE__ ) . '/includes/pyd-shortcode.php' );
+    require_once( dirname( __FILE__ ) . '/includes/pyd-settings.php' );
 
 
     add_action( 'wp_enqueue_scripts', 'pyd_vimeo_albums_register_scripts' );
@@ -50,7 +51,26 @@
 
         wp_enqueue_style( 'thickbox' );
         wp_enqueue_style( 'pydviemoalbumsscript' );
+
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'thickbox' );
-
     }
+
+
+    /*-----------------------------------------------------------------------------------*/
+    /* Call register settings function */
+    /*-----------------------------------------------------------------------------------*/
+
+    function pyd_vimeo_videos_settings() {
+
+        register_setting( 'pyd-vimeo-videos-group', 'pyd_vimeo_videos' );
+    }
+
+    add_action( 'admin_init', 'pyd_vimeo_videos_settings' );
+
+
+    /*-----------------------------------------------------------------------------------*/
+    /* Setup functions to use */
+    /*-----------------------------------------------------------------------------------*/
+
+    $pyd_vimeo_username = get_option( 'pyd_vimeo_videos' );
