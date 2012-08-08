@@ -27,9 +27,7 @@
 
         $pyd_vimeo_albums = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $albumid . '/videos.php' ) );
 
-
         ob_start();
-
 
         echo '<div class="pyd_vimeo_container pydClear">';
 
@@ -87,26 +85,20 @@
         $add_my_script = true;
 
         $pyd_vimeo_album_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/albums.php' ) );
-
-        echo '<pre>';
-        print_r( $pyd_vimeo_album_ids );
-        echo '</pre>';
-
         ?>
 
     <script>
-            function pydvimeoinsertshort() {
-                var album_id = jQuery("#pyd_vimeo_video_album_id").val();
-                if (album_id == "") {
-                    alert("<?php _e( "Please select a gallery to use", "pyd" ) ?>");
-                    return;
-                }
-                var album_title = jQuery("#pyd_vimeo_video_album_title").val();
-
-
-                parent.send_to_editor("[pydvimeoalbums albumid=\"" + album_id + "\" title=\"" + album_title + "\" ]");
+        function pydvimeoinsertshort() {
+            var album_id = jQuery("#pyd_vimeo_video_album_id").val();
+            if (album_id == "") {
+                alert("<?php _e( "Please select a gallery to use", "pyd" ) ?>");
+                return;
             }
-        </script>
+            var album_title = jQuery("#pyd_vimeo_video_album_title").val();
+
+            parent.send_to_editor("[pydvimeoalbums albumid=\"" + album_id + "\" title=\"" + album_title + "\" ]");
+        }
+    </script>
 
     <div id="pyd_vimeo_videos_form">
         <div class="wrap">
@@ -130,9 +122,7 @@
                         </select>
                     </p>
 
-                    <p>
-                        Display Title: <input type="checkbox" id="pyd_vimeo_video_album_title" name="title" value="<?php echo $pyd_vimeo_album_id[ 'title' ]; ?>" /><br />
-                    </p>
+                    <p>Display Title: <input type="checkbox" id="pyd_vimeo_video_album_title" name="title" value="<?php echo $pyd_vimeo_album_id[ 'title' ]; ?>" /></p>
                 </div>
                 <div style="padding:15px;">
                     <input type="button" class="button-primary" value="Insert Vimeo Videos"

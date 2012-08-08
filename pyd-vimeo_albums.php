@@ -3,7 +3,7 @@
      Plugin Name: Vimeo Videos Display
      Plugin URI: http://pokayoke.co
      Description: Creates a shortcode for displaying videos from your Vimeo account.  Adds a tab to your import media button on pages and posts.
-     Version: 1.00
+     Version: 1.01
      Author: Michael Gyura
      Author URI: http://gyura.com
     */
@@ -74,3 +74,22 @@
     /*-----------------------------------------------------------------------------------*/
 
     $pyd_vimeo_username = get_option( 'pyd_vimeo_videos' );
+
+
+    /*-----------------------------------------------------------------------------------*/
+    /* Admin Message when plugin needs to be authorized by SmugMug */
+    /*-----------------------------------------------------------------------------------*/
+
+
+    function pyd_vimeo_albums_showMessage() {
+        global $pyd_vimeo_username;
+        if ( $pyd_vimeo_username['username'] == null ) {
+            echo '<div id="message" class="error"><p><strong>The Vimeo Videos plugin needs to be linked with an account.  Please <a href="/wp-admin/options-general.php?page=vimeovideos-settings" title="authorize Vimeo Videos">click here</a> to add your Vimeo user name</strong></p></div>';
+        }
+    }
+
+    function pyd_vimeo_albums_showAdminMessages() {
+        pyd_vimeo_albums_showMessage( "The Vimeo Videos plugin needs to be linked with an account.", true );
+    }
+
+    add_action( 'admin_notices', 'pyd_vimeo_albums_showAdminMessages' );
