@@ -25,27 +25,70 @@
             )
         );
 
-        $pyd_vimeo_albums = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $albumid . '/videos.php' ) );
-        $pyd_vimeo_album_info = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $albumid . '/info.php' ) );
+        //get raw date from Vimeo
+        $pyd_vimeo_albums_raw = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $albumid . '/videos.php' ) );
+        $pyd_vimeo_album_info_raw = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $albumid . '/info.php' ) );
 
+
+        //build some cache out of the data
+        $pyd_vimeo_albums_get_trans = get_transient('pyd_vimeo_albums_' . $albumid . '_' . $title);
+
+        if(!$pyd_vimeo_albums_get_trans) {
+
+            foreach($pyd_vimeo_albums_raw as $pyd_vimeo_albums_data => $albumvalue) {
+                $pyd_vimeo_albums_save[] = array(
+                    'album_title' =>  $pyd_vimeo_album_info_raw['title'],
+                    'image_id' => $albumvalue['id'],
+                    'image_title' => $albumvalue['title'],
+                    'image_description' => $albumvalue['description'],
+                    'image_url' => $albumvalue['url'],
+                    'image_upload_date' => $albumvalue['upload_date'],
+                    'image_mobile_url' => $albumvalue['mobile_url'],
+                    'image_thumbnail_small' => $albumvalue['thumbnail_small'],
+                    'image_thumbnail_medium' => $albumvalue['thumbnail_medium'],
+                    'image_thumbnail_large' => $albumvalue['thumbnail_large'],
+                    'image_user_name' => $albumvalue['user_name'],
+                    'image_user_url' => $albumvalue['user_url'],
+                    'image_user_portrait_small' => $albumvalue['user_portrait_small'],
+                    'image_user_portrait_medium' => $albumvalue['user_portrait_medium'],
+                    'image_user_portrait_large' => $albumvalue['user_portrait_large'],
+                    'image_user_portrait_huge' => $albumvalue['user_portrait_huge'],
+                    'image_stats_number_of_likes' => $albumvalue['stats_number_of_likes'],
+                    'image_stats_number_of_plays' => $albumvalue['stats_number_of_plays'],
+                    'image_stats_number_of_comments' => $albumvalue['stats_number_of_comments'],
+                    'image_duration' => $albumvalue['duration'],
+                    'image_width' => $albumvalue['width'],
+                    'image_height' => $albumvalue['height'],
+                    'image_tags' => $albumvalue['tags'],
+                    'image_embed_privacy' => $albumvalue['embed_privacy'],
+                );
+            }
+
+            set_transient('pyd_vimeo_albums_' . $albumid . '_' . $title, $pyd_vimeo_albums_save, 3600 );
+        }
+
+        $pyd_vimeo_albums = get_transient('pyd_vimeo_albums_' . $albumid . '_' . $title);
+
+
+        //start to build the page
         ob_start();
 
         echo '<div class="pyd_vimeo_container pydClear">';
 
         if ( $title ) {
-            echo '<h2>' . $pyd_vimeo_album_info['title'] . '</h2>';
+            echo '<h2>' . $pyd_vimeo_albums[0]['album_title'] . '</h2>';
         }
 
         foreach ( $pyd_vimeo_albums as $pyd_vimeo_album ) {
             ?>
 
         <div class="pyd_vimeo_videos">
-            <a href="#TB_inline?height=281&amp;width=500&amp;inlineId=<?php echo 'pyd_vimeo_' . $pyd_vimeo_album[ 'id' ]; ?>" title="<?php echo $pyd_vimeo_album[ 'title' ]; ?>" class="thickbox"><img src="<?php echo $pyd_vimeo_album[ 'thumbnail_medium' ]; ?>" /></a>
-            <p><a href="#TB_inline?height=281&amp;width=500&amp;inlineId=<?php echo 'pyd_vimeo_' . $pyd_vimeo_album[ 'id' ]; ?>" title="<?php echo $pyd_vimeo_album[ 'title' ]; ?>" class="thickbox"><?php echo $pyd_vimeo_album[ 'title' ]; ?></a></p>
+            <a href="#TB_inline?height=281&amp;width=500&amp;inlineId=<?php echo 'pyd_vimeo_' . $pyd_vimeo_album[ 'image_id' ]; ?>" title="<?php echo $pyd_vimeo_album[ 'image_title' ]; ?>" class="thickbox"><img src="<?php echo $pyd_vimeo_album[ 'image_thumbnail_medium' ]; ?>" /></a>
+            <p><a href="#TB_inline?height=281&amp;width=500&amp;inlineId=<?php echo 'pyd_vimeo_' . $pyd_vimeo_album[ 'image_id' ]; ?>" title="<?php echo $pyd_vimeo_album[ 'image_title' ]; ?>" class="thickbox"><?php echo $pyd_vimeo_album[ 'image_title' ]; ?></a></p>
         </div>
 
-        <div id="<?php echo 'pyd_vimeo_' . $pyd_vimeo_album[ 'id' ]; ?>" class="pyd_vimeo_video" style="display:none;">
-            <iframe src="http://player.vimeo.com/video/<?php echo $pyd_vimeo_album[ 'id' ]; ?>?title=0&amp;byline=0&amp;portrait=0&amp;wmode=transparent" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        <div id="<?php echo 'pyd_vimeo_' . $pyd_vimeo_album[ 'image_id' ]; ?>" class="pyd_vimeo_video" style="display:none;">
+            <iframe src="http://player.vimeo.com/video/<?php echo $pyd_vimeo_album[ 'image_id' ]; ?>?title=0&amp;byline=0&amp;portrait=0&amp;wmode=transparent" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
         </div>
 
         <?php

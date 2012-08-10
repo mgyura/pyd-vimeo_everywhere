@@ -3,7 +3,7 @@
      Plugin Name: Vimeo Videos Display
      Plugin URI: http://pokayoke.co
      Description: Creates a shortcode for displaying videos from your Vimeo account.  Adds a tab to your import media button on pages and posts.
-     Version: 1.01
+     Version: 1.02
      Author: Michael Gyura
      Author URI: http://gyura.com
     */
