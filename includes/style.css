@@ -3,17 +3,77 @@ PYD Vimeo Albums CSS
 Michael Gyura of Poka Yoke Design
 */
 
-
 .pyd_vimeo_videos {
-    width: 200px;
-    height: 220px;
-    float: left;
     padding: 10px;
     text-align: center;
+    overflow: hidden;
 }
+
+.pyd_text .video_thumbnail_small {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    margin: 10px;
+    background: #DDD;
+    text-align: center;
+    font-size: 12px;
+}
+
+.pyd_text .video_thumbnail_medium {
+    width: 200px;
+    height: 210px;
+    padding: 10px;
+    margin: 10px;
+    background: #DDD;
+    text-align: center;
+    font-size: 12px;
+}
+
+.pyd_text .video_thumbnail_large {
+    width: 640px;
+    height: 360px;
+    padding: 10px;
+    margin: 10px;
+    background: #DDD;
+    text-align: center;
+    font-size: 12px;
+}
+
+.pyd_notext .video_thumbnail_small {
+    width: 100px;
+    height: 75px;
+    margin: 10px;
+
+}
+
+.pyd_notext .video_thumbnail_medium {
+    width: 200px;
+    height: 150px;
+    margin: 10px;
+}
+
+.pyd_notext .video_thumbnail_large {
+    width: 640px;
+    height: 410px;
+    margin: 10px;
+}
+
+.pyd_left {
+    float: left;
+}
+
+.pyd_right {
+    float: right;
+}
+
+.pyd_none {
+    float: none;
+}
+
 #TB_window {
     z-index: 99999;
 }
+
 .pydClear {
     clear: both;
 }
