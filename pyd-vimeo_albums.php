@@ -32,21 +32,22 @@
     require_once( dirname( __FILE__ ) . '/includes/pyd-shortcode.php' );
     require_once( dirname( __FILE__ ) . '/includes/pyd-settings.php' );
     require_once( dirname( __FILE__ ) . '/includes/pyd-admin_videos.php' );
+    require_once( dirname( __FILE__ ) . '/includes/pyd-widgets.php' );
 
 
-    add_action( 'wp_enqueue_scripts', 'pyd_vimeo_albums_register_scripts' );
     add_action( 'admin_enqueue_scripts', 'pyd_vimeo_albums_admin_scripts' );
 
     function pyd_vimeo_albums_admin_scripts() {
         wp_register_style( 'pydvimeoadmintyles', plugins_url( '/includes/adminstyle.css', __FILE__ ) );
         wp_enqueue_style( 'pydvimeoadmintyles' );
-
         wp_enqueue_style( 'thickbox' );
 
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'thickbox' );
     }
 
+
+    add_action( 'wp_enqueue_scripts', 'pyd_vimeo_albums_register_scripts' );
 
     function pyd_vimeo_albums_register_scripts() {
         wp_register_style( 'pydviemoalbumsstyle', plugins_url( '/includes/style.css', __FILE__ ) );
@@ -71,7 +72,7 @@
 
 
     /*-----------------------------------------------------------------------------------*/
-    /* Call register settings function */
+    /* Register settings function */
     /*-----------------------------------------------------------------------------------*/
 
     function pyd_vimeo_videos_settings() {
@@ -142,6 +143,7 @@
                                      'title'            => 'Vimeo Videos',
                                      'admin_vid_width'  => 703,
                                      'admin_vid_height' => 395,
+                                     'admin_menu' => 'upload.php',
                                 )
         );
     }

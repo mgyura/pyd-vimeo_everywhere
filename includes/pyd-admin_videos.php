@@ -11,7 +11,7 @@
     function pyd_vimeo_admin_menu() {
         global $pyd_vimeo_user_data;
 
-        add_submenu_page( 'upload.php', $pyd_vimeo_user_data[ 'title' ], $pyd_vimeo_user_data[ 'title' ], 'edit_posts', 'vimeovideos-display', 'pyd_vimeo_videos_admin_vids' );
+        add_submenu_page( $pyd_vimeo_user_data[ 'admin_menu' ], $pyd_vimeo_user_data[ 'title' ], $pyd_vimeo_user_data[ 'title' ], 'edit_posts', 'vimeovideos-display', 'pyd_vimeo_videos_admin_vids' );
     }
 
     add_action( 'admin_menu', 'pyd_vimeo_admin_menu' );
@@ -24,35 +24,36 @@
     function pyd_vimeo_videos_admin_vids() {
         global $pyd_vimeo_user_data;
 
+        if ( isset ($pyd_vimeo_user_data[ 'admin_albums' ] )) {
 
-        //build some cache out of the data
-        $pyd_vimeo_admin_albums_get_trans = get_transient( 'pyd_vimeo_admin_albums' );
+            //build some cache out of the data
+            $pyd_vimeo_admin_albums_get_trans = get_transient( 'pyd_vimeo_admin_albums' );
 
-        if ( !$pyd_vimeo_admin_albums_get_trans ) {
+            if ( !$pyd_vimeo_admin_albums_get_trans ) {
 
-            //run through the raw data and place it into arrays with album names and then make it a level deep to make sure a name conflict doesnt happen.
-            foreach ( $pyd_vimeo_user_data[ 'admin_albums' ] as $pyd_vimeo_album => $album ) {
-                $pyd_vimeo_album_info                                         = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $album . '/info.php' ) );
-                $pyd_vimeo_album                                              = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $album . '/videos.php' ) );
-                $pyd_vimeo_album_array[ ][ $pyd_vimeo_album_info[ 'title' ] ] = $pyd_vimeo_album;
+                //run through the raw data and place it into arrays with album names and then make it a level deep to make sure a name conflict doesnt happen.
+                foreach ( $pyd_vimeo_user_data[ 'admin_albums' ] as $pyd_vimeo_album => $album ) {
+                    $pyd_vimeo_album_info                                         = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $album . '/info.php' ) );
+                    $pyd_vimeo_album                                              = unserialize( file_get_contents( 'http://vimeo.com/api/v2/album/' . $album . '/videos.php' ) );
+                    $pyd_vimeo_album_array[ ][ $pyd_vimeo_album_info[ 'title' ] ] = $pyd_vimeo_album;
+                }
+
+                set_transient( 'pyd_vimeo_admin_albums', $pyd_vimeo_album_array, 3600 );
             }
 
-            set_transient( 'pyd_vimeo_admin_albums', $pyd_vimeo_album_array, 3600 );
-        }
+            $pyd_vimeo_admin_albums = get_transient( 'pyd_vimeo_admin_albums' );
+            ?>
 
-        $pyd_vimeo_admin_albums = get_transient( 'pyd_vimeo_admin_albums' );
-        ?>
-
-    <div class="wrap">
+        <div class="wrap">
         <h2><?php echo $pyd_vimeo_user_data[ 'title' ]; ?></h2>
-        <?php
+            <?php
 
-        foreach ( $pyd_vimeo_admin_albums as $pyd_vimeo_album => $albums ) {
+            foreach ( $pyd_vimeo_admin_albums as $pyd_vimeo_album => $albums ) {
 
-            foreach ( $albums as $album => $albumdata ) {
-                ?>
+                foreach ( $albums as $album => $albumdata ) {
+                    ?>
 
-                <div class="pyd_viemo_table">
+                    <div class="pyd_viemo_table">
                     <h3><? echo $album; ?></h3>
                     <table class="widefat">
                         <thead>
@@ -104,11 +105,17 @@
                     </table>
 
                 </div>
-                <?php
+                    <?php
+                }
             }
-        }
-        ?>
+            ?>
 
     </div>
-    <?php
+        <?php
+        }
+
+        else {
+            echo '<div class="wrap"><p>Vimeo Albums need to first be selected before videos will display here.  You can do that <a href="/wp-admin/options-general.php?page=vimeovideos-settings&settings-updated=true" >here</a></p></div>';
+        }
+
     }
