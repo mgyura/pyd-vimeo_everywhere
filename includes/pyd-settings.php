@@ -27,6 +27,13 @@
                         <small>Enter in the ID of the user account to use, an email address will NOT work.  Example: wpprof</small>
                     </td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row">Admin Video Display Title</th>
+                    <td>
+                        <input type="text" name="pyd_vimeo_videos[title]" value="<?php echo $pyd_vimeo_username[ 'title' ]; ?>" /><br />
+                        <small>What would you like the link on the dashboard menu to be?</small>
+                    </td>
+                </tr>
             </table>
 
             <p class="submit">

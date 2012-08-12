@@ -31,6 +31,7 @@
 
     require_once( dirname( __FILE__ ) . '/includes/pyd-shortcode.php' );
     require_once( dirname( __FILE__ ) . '/includes/pyd-settings.php' );
+    require_once( dirname( __FILE__ ) . '/includes/pyd-admin_videos.php' );
 
 
     add_action( 'wp_enqueue_scripts', 'pyd_vimeo_albums_register_scripts' );
@@ -106,4 +107,27 @@
         delete_transient( 'pyd_vimeo_albums_' . $albumid . $pyd_vimeo_post_id );
         delete_transient( 'pyd_vimeo_albums_' . $videoid . $pyd_vimeo_post_id );
         delete_transient( 'pyd_vimeo_channel_' . $channelid . $pyd_vimeo_post_id );
+    }
+
+    /*-----------------------------------------------------------------------------------*/
+    /* Activation Hook.  Check WP Version and set defaults */
+    /*-----------------------------------------------------------------------------------*/
+
+    register_activation_hook( __FILE__, 'pyd_vimeo_activation_shit' );
+
+    function pyd_vimeo_activation_shit() {
+        global $wp_version;
+
+        if ( version_compare( $wp_version, "3.3", "<" ) ) {
+
+            deactivate_plugins( basename( __file__ ) );
+            wp_die( "This plugin requires WordPress version 3.3 or higher." );
+        }
+
+        add_option(
+            'pyd_vimeo_videos', array(
+                                     'username'  => '',
+                                     'title'     => 'Vimeo Videos'
+                                )
+        );
     }
