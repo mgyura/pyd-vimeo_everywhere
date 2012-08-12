@@ -1,0 +1,43 @@
+/*
+* Styles for the Vimeo Albums Admin Display Area
+* mgyura
+* 08/11/2012
+*/
+
+.wp-admin .pyd_vimeo_checkbox {
+    float: left;
+    width: 31%;
+    margin-right: 1%
+}
+
+.wp-admin .pyd_vimeo_checkbox {
+    margin: 5px;
+}
+
+.wp-admin .pyd_viemo_table {
+    margin: 40px 5px;
+}
+
+.wp-admin tr td.pyd_vimeo_title {
+    width: 30%;
+}
+
+.wp-admin tr td.pyd_vimeo_title p {
+    padding: 13px 5px;
+    float: left;
+}
+
+.wp-admin tr td.pyd_vimeo_desc {
+    width: 70%;
+}
+
+.wp-admin img.pyd_vimeo_icon {
+    float: left;
+    margin: 3px;
+}
+
+.pydClear {
+    clear: both;
+}
+
+

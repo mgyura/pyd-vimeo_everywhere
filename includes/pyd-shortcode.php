@@ -313,13 +313,11 @@
     }
 
     function pyd_vimeo_videos_media_upload_form() {
-        global $add_my_script, $pyd_vimeo_username;
+        global $pyd_vimeo_user_data;
 
-        $add_my_script = true;
-
-        $pyd_vimeo_album_ids    = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/albums.php' ) );
-        $pyd_vimeo_video_ids    = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/videos.php' ) );
-        $pyd_vimeo_channels_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/channels.php' ) );
+        $pyd_vimeo_album_ids    = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_user_data[ 'username' ] . '/albums.php' ) );
+        $pyd_vimeo_video_ids    = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_user_data[ 'username' ] . '/videos.php' ) );
+        $pyd_vimeo_channels_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_user_data[ 'username' ] . '/channels.php' ) );
         ?>
 
         <script>

@@ -3,7 +3,7 @@
      Plugin Name: Vimeo Videos Display
      Plugin URI: http://pokayoke.co
      Description: Creates a shortcode for displaying videos from your Vimeo account.  Adds a tab to your import media button on pages and posts.
-     Version: 1.04
+     Version: 1.05
      Author: Michael Gyura
      Author URI: http://gyura.com
     */
@@ -35,9 +35,21 @@
 
 
     add_action( 'wp_enqueue_scripts', 'pyd_vimeo_albums_register_scripts' );
+    add_action( 'admin_enqueue_scripts', 'pyd_vimeo_albums_admin_scripts' );
+
+    function pyd_vimeo_albums_admin_scripts() {
+        wp_register_style( 'pydvimeoadmintyles', plugins_url( '/includes/adminstyle.css', __FILE__ ) );
+        wp_enqueue_style( 'pydvimeoadmintyles' );
+
+        wp_enqueue_style( 'thickbox' );
+
+        wp_enqueue_script( 'jquery' );
+        wp_enqueue_script( 'thickbox' );
+    }
+
 
     function pyd_vimeo_albums_register_scripts() {
-        wp_register_style( 'pydviemoalbumsscript', plugins_url( '/includes/style.css', __FILE__ ) );
+        wp_register_style( 'pydviemoalbumsstyle', plugins_url( '/includes/style.css', __FILE__ ) );
     }
 
 
@@ -51,7 +63,7 @@
         }
 
         wp_enqueue_style( 'thickbox' );
-        wp_enqueue_style( 'pydviemoalbumsscript' );
+        wp_enqueue_style( 'pydviemoalbumsstyle' );
 
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'thickbox' );
@@ -74,7 +86,7 @@
     /* Setup functions to use */
     /*-----------------------------------------------------------------------------------*/
 
-    $pyd_vimeo_username = get_option( 'pyd_vimeo_videos' );
+    $pyd_vimeo_user_data = get_option( 'pyd_vimeo_videos' );
 
 
     /*-----------------------------------------------------------------------------------*/
@@ -82,8 +94,8 @@
     /*-----------------------------------------------------------------------------------*/
 
     function pyd_vimeo_albums_showMessage() {
-        global $pyd_vimeo_username;
-        if ( $pyd_vimeo_username[ 'username' ] == null ) {
+        global $pyd_vimeo_user_data;
+        if ( $pyd_vimeo_user_data[ 'username' ] == null ) {
             echo '<div id="message" class="error"><p><strong>The Vimeo Videos plugin needs to be linked with an account.  Please <a href="/wp-admin/options-general.php?page=vimeovideos-settings" title="authorize Vimeo Videos">click here</a> to add your Vimeo user name</strong></p></div>';
         }
     }
@@ -126,8 +138,10 @@
 
         add_option(
             'pyd_vimeo_videos', array(
-                                     'username'  => '',
-                                     'title'     => 'Vimeo Videos'
+                                     'username'         => '',
+                                     'title'            => 'Vimeo Videos',
+                                     'admin_vid_width'  => 703,
+                                     'admin_vid_height' => 395,
                                 )
         );
     }
