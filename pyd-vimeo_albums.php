@@ -3,7 +3,7 @@
      Plugin Name: Vimeo Videos Display
      Plugin URI: http://pokayoke.co
      Description: Creates a shortcode for displaying videos from your Vimeo account.  Adds a tab to your import media button on pages and posts.
-     Version: 1.03
+     Version: 1.04
      Author: Michael Gyura
      Author URI: http://gyura.com
     */
@@ -76,15 +76,13 @@
     $pyd_vimeo_username = get_option( 'pyd_vimeo_videos' );
 
 
-
     /*-----------------------------------------------------------------------------------*/
     /* Admin Message when plugin needs to be authorized by SmugMug */
     /*-----------------------------------------------------------------------------------*/
 
-
     function pyd_vimeo_albums_showMessage() {
         global $pyd_vimeo_username;
-        if ( $pyd_vimeo_username['username'] == null ) {
+        if ( $pyd_vimeo_username[ 'username' ] == null ) {
             echo '<div id="message" class="error"><p><strong>The Vimeo Videos plugin needs to be linked with an account.  Please <a href="/wp-admin/options-general.php?page=vimeovideos-settings" title="authorize Vimeo Videos">click here</a> to add your Vimeo user name</strong></p></div>';
         }
     }
@@ -94,3 +92,18 @@
     }
 
     add_action( 'admin_notices', 'pyd_vimeo_albums_showAdminMessages' );
+
+
+    /*-----------------------------------------------------------------------------------*/
+    /* Delete Trasients on post save */
+    /*-----------------------------------------------------------------------------------*/
+
+    add_action( 'save_post', 'pyd_vimeo_delete_trans' );
+
+    function pyd_vimeo_delete_trans() {
+        global $pyd_vimeo_post_id, $albumid, $videoid, $channelid;
+
+        delete_transient( 'pyd_vimeo_albums_' . $albumid . $pyd_vimeo_post_id );
+        delete_transient( 'pyd_vimeo_albums_' . $videoid . $pyd_vimeo_post_id );
+        delete_transient( 'pyd_vimeo_channel_' . $channelid . $pyd_vimeo_post_id );
+    }

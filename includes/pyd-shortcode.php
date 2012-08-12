@@ -12,21 +12,26 @@
     add_shortcode( 'pydvimeovideos', 'pyd_vimeo_albums_shortcode' );
 
     function pyd_vimeo_albums_shortcode( $atts ) {
-        global $add_my_script;
+        global $add_my_script, $post;
 
+        //call in the scripts
         $add_my_script = true;
+
+        //Get post ID for transient
+        $pyd_vimeo_post_id = $post->ID;
 
         extract(
             shortcode_atts(
                 array(
-                     'albumid'         => '',
-                     'videoid'         => '',
-                     'albumtitle'      => '',
-                     'vidtitle'        => '',
-                     'iconsize'        => 'video_thumbnail_medium',
-                     'vidheight'       => 281,
-                     'vidwidth'        => 500,
-                     'iconfloat'       => 'pyd_left',
+                     'albumid'    => '',
+                     'videoid'    => '',
+                     'channelid'  => '',
+                     'albumtitle' => '',
+                     'vidtitle'   => '',
+                     'iconsize'   => 'video_thumbnail_medium',
+                     'vidheight'  => 281,
+                     'vidwidth'   => 500,
+                     'iconfloat'  => 'pyd_left',
                 ), $atts
             )
         );
@@ -41,16 +46,8 @@
 
         if ( $albumid ) {
 
-            //delete transient on post save
-            add_action( 'save_post', 'pyd_vimeo_delete_album_trans' );
-
-            function fpcnash_delete_short_trans() {
-                delete_transient( 'pyd_vimeo_albums_' . $albumid );
-            }
-
-
             //build some cache out of the data
-            $pyd_vimeo_albums_get_trans = get_transient( 'pyd_vimeo_albums_' . $albumid );
+            $pyd_vimeo_albums_get_trans = get_transient( 'pyd_vimeo_albums_' . $albumid . $pyd_vimeo_post_id );
 
             if ( !$pyd_vimeo_albums_get_trans ) {
 
@@ -87,10 +84,10 @@
                     );
                 }
 
-                set_transient( 'pyd_vimeo_albums_' . $albumid, $pyd_vimeo_albums_save, 3600 );
+                set_transient( 'pyd_vimeo_albums_' . $albumid . $pyd_vimeo_post_id, $pyd_vimeo_albums_save, 3600 );
             }
 
-            $pyd_vimeo_albums = get_transient( 'pyd_vimeo_albums_' . $albumid );
+            $pyd_vimeo_albums = get_transient( 'pyd_vimeo_albums_' . $albumid . $pyd_vimeo_post_id );
 
 
             ?>
@@ -136,12 +133,13 @@
 
         elseif ( $videoid ) {
 
-            $pyd_vimeo_video_raw = unserialize( file_get_contents( 'http://vimeo.com/api/v2/video/' . $videoid . '.php' ) );
-
             //build some cache out of the data
-            $pyd_vimeo_videos_get_trans = get_transient( 'pyd_vimeo_video_' . $videoid . '_' . $albumtitle );
+            $pyd_vimeo_videos_get_trans = get_transient( 'pyd_vimeo_video_' . $videoid . $pyd_vimeo_post_id );
 
             if ( !$pyd_vimeo_videos_get_trans ) {
+
+                //get the raw data from Vimeo
+                $pyd_vimeo_video_raw = unserialize( file_get_contents( 'http://vimeo.com/api/v2/video/' . $videoid . '.php' ) );
 
                 foreach ( $pyd_vimeo_video_raw as $pyd_vimeo_videos_data => $videovalue ) {
                     $pyd_vimeo_video_save = array(
@@ -171,10 +169,10 @@
                     );
                 }
 
-                set_transient( 'pyd_vimeo_video_' . $videoid . '_' . $albumtitle, $pyd_vimeo_video_save, 3600 );
+                set_transient( 'pyd_vimeo_video_' . $videoid . $pyd_vimeo_post_id, $pyd_vimeo_video_save, 3600 );
             }
 
-            $pyd_vimeo_video = get_transient( 'pyd_vimeo_video_' . $videoid . '_' . $albumtitle );
+            $pyd_vimeo_video = get_transient( 'pyd_vimeo_video_' . $videoid . $pyd_vimeo_post_id );
 
             ?>
 
@@ -197,6 +195,95 @@
         </div>
 
             <?php
+        }
+
+
+        /*-----------------------------------------------------------------------------------*/
+        /* Code if showing a video channel on a page or post */
+        /*-----------------------------------------------------------------------------------*/
+
+        elseif ( $channelid ) {
+
+            //build some cache out of the data
+            $pyd_vimeo_channels_get_trans = get_transient( 'pyd_vimeo_channel_' . $channelid . $pyd_vimeo_post_id );
+
+
+            if ( !$pyd_vimeo_channels_get_trans ) {
+
+                //get the raw data from Vimeo
+                $pyd_vimeo_channels_raw      = unserialize( file_get_contents( 'http://vimeo.com/api/v2/channel/' . $channelid . '/videos.php' ) );
+                $pyd_vimeo_channels_info_raw = unserialize( file_get_contents( 'http://vimeo.com/api/v2/channel/' . $channelid . '/info.php' ) );
+
+                foreach ( $pyd_vimeo_channels_raw as $pyd_vimeo_channel_data => $channelvalue ) {
+                    $pyd_vimeo_channel_save[ ] = array(
+                        'channel_title'                  => $pyd_vimeo_channels_info_raw[ 'name' ],
+                        'video_id'                       => $channelvalue[ 'id' ],
+                        'video_title'                    => $channelvalue[ 'title' ],
+                        'video_description'              => $channelvalue[ 'description' ],
+                        'video_url'                      => $channelvalue[ 'url' ],
+                        'video_upload_date'              => $channelvalue[ 'upload_date' ],
+                        'video_mobile_url'               => $channelvalue[ 'mobile_url' ],
+                        'video_thumbnail_small'          => $channelvalue[ 'thumbnail_small' ],
+                        'video_thumbnail_medium'         => $channelvalue[ 'thumbnail_medium' ],
+                        'video_thumbnail_large'          => $channelvalue[ 'thumbnail_large' ],
+                        'video_user_name'                => $channelvalue[ 'user_name' ],
+                        'video_user_url'                 => $channelvalue[ 'user_url' ],
+                        'video_user_portrait_small'      => $channelvalue[ 'user_portrait_small' ],
+                        'video_user_portrait_medium'     => $channelvalue[ 'user_portrait_medium' ],
+                        'video_user_portrait_large'      => $channelvalue[ 'user_portrait_large' ],
+                        'video_user_portrait_huge'       => $channelvalue[ 'user_portrait_huge' ],
+                        'video_stats_number_of_likes'    => $channelvalue[ 'stats_number_of_likes' ],
+                        'video_stats_number_of_plays'    => $channelvalue[ 'stats_number_of_plays' ],
+                        'video_stats_number_of_comments' => $channelvalue[ 'stats_number_of_comments' ],
+                        'video_duration'                 => $channelvalue[ 'duration' ],
+                        'video_width'                    => $channelvalue[ 'width' ],
+                        'video_height'                   => $channelvalue[ 'height' ],
+                        'video_tags'                     => $channelvalue[ 'tags' ],
+                        'video_embed_privacy'            => $channelvalue[ 'embed_privacy' ],
+                    );
+                }
+
+                set_transient( 'pyd_vimeo_channel_' . $channelid . $pyd_vimeo_post_id, $pyd_vimeo_channel_save, 3600 );
+            }
+
+            $pyd_vimeo_channels = get_transient( 'pyd_vimeo_channel_' . $channelid . $pyd_vimeo_post_id );
+            ?>
+
+        <div class="pyd_vimeo_container <?php if ( $vidtitle ) {
+            echo ' pyd_text';
+        }
+        else {
+            echo ' pyd_notext';
+        } ?>">
+
+            <?php
+
+            if ( $albumtitle ) {
+                echo '<h2>' . $pyd_vimeo_channels[ 0 ][ 'channel_title' ] . '</h2>';
+            }
+
+            foreach ( $pyd_vimeo_channels as $pyd_vimeo_channel ) {
+                ?>
+
+                <div class="pyd_vimeo_videos <?php echo $iconsize . ' ' . $iconfloat; ?>">
+                    <a href="#TB_inline?height=<?php echo $vidheight; ?>&amp;width=<?php echo $vidwidth; ?>&amp;inlineId=<?php echo 'pyd_vimeo_' . $pyd_vimeo_channel[ 'video_id' ]; ?>" title="<?php echo $pyd_vimeo_channel[ 'video_title' ]; ?>" class="thickbox"><img src="<?php echo $pyd_vimeo_channel[ $iconsize ]; ?>" /></a>
+                    <?php if ( $vidtitle ) { ?>
+                    <p><a href="#TB_inline?height=<?php echo $vidheight; ?>&amp;width=<?php echo $vidwidth; ?>&amp;inlineId=<?php echo 'pyd_vimeo_' . $pyd_vimeo_channel[ 'video_id' ]; ?>" title="<?php echo $pyd_vimeo_channel[ 'video_title' ]; ?>" class="thickbox"><?php echo $pyd_vimeo_channel[ 'video_title' ]; ?></a></p>
+                    <?php } ?>
+                </div>
+
+                <div id="<?php echo 'pyd_vimeo_' . $pyd_vimeo_channel[ 'video_id' ]; ?>" class="pyd_vimeo_video" style="display:none;">
+                    <iframe src="http://player.vimeo.com/video/<?php echo $pyd_vimeo_channel[ 'video_id' ]; ?>?title=0&amp;byline=0&amp;portrait=0&amp;wmode=transparent" width="<?php echo $vidwidth; ?>" height="<?php echo $vidheight; ?>" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                </div>
+
+                <?php
+            }
+
+            echo '<div class="pydClear"></div></div>';
+        }
+
+        else {
+            echo 'Bummer, I do not have enough info.  Before a Vimeo video can be shown you need to select one.';
         }
 
         $output_string = ob_get_contents();
@@ -230,118 +317,134 @@
 
         $add_my_script = true;
 
-        $pyd_vimeo_album_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/albums.php' ) );
-        $pyd_vimeo_video_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/videos.php' ) );
+        $pyd_vimeo_album_ids    = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/albums.php' ) );
+        $pyd_vimeo_video_ids    = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/videos.php' ) );
+        $pyd_vimeo_channels_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_username[ 'username' ] . '/channels.php' ) );
         ?>
 
-    <script>
-        function pydvimeoinsertshort() {
-            var album_id = jQuery("#pyd_vimeo_video_album_id").val();
+        <script>
+            function pydvimeoinsertshort() {
+                var album_id = jQuery("#pyd_vimeo_video_album_id").val();
+                var video_id = jQuery("#pyd_vimeo_video_id").val();
+                var channel_id = jQuery("#pyd_vimeo_video_channel_id").val();
 
-            var video_id = jQuery("#pyd_vimeo_video_id").val();
+                if (album_id == "" && video_id == "" && channel_id == "" ) {
+                         alert("<?php _e( "Please either a gallery, album, or video to show", "pydnet" ) ?>");
+                         return;
+                     }
 
-            var album_title = jQuery("#pyd_vimeo_video_album_title").val();
+                var album_title = jQuery("#pyd_vimeo_video_album_title").val();
+                var video_title = jQuery("#pyd_vimeo_video_title").val();
+                var icon_size = jQuery("#pyd_vimeo_video_icon").val();
+                var icon_float = jQuery("#pyd_vimeo_video_icon_float").val();
+                var video_width = jQuery("#pyd_vimeo_video_width").val();
+                var video_height = jQuery("#pyd_vimeo_video_height").val();
 
-            var video_title = jQuery("#pyd_vimeo_video_title").val();
+                parent.send_to_editor("[pydvimeovideos " + album_id + channel_id + video_id + video_title + album_title + " iconsize=\"" + icon_size + "\" iconfloat=\"" + icon_float + "\" vidwidth=\"" + video_width + "\" vidheight=\"" + video_height + "\" ]");
+            }
+        </script>
 
-            var icon_size = jQuery("#pyd_vimeo_video_icon").val();
+        <div id="pyd_vimeo_videos_form">
+            <div class="wrap">
+                <div>
+                    <div style="padding:15px 15px 0 15px;">
+                        <h3 style="color:#5A5A5A!important; font-family:Georgia,Times New Roman,Times,serif!important; font-size:1.8em!important; font-weight:normal!important;"><?php _e( "Insert Vimeo Videos", "pyd" ); ?></h3>
+                        <span>
+                            <?php _e( "Select the options below to display your Vimeo Videos on this page.", "pyd" ); ?>
+                        </span>
+                    </div>
+                    <div style="padding:15px 15px 0 15px;">
 
-            var icon_float = jQuery("#pyd_vimeo_video_icon_float").val();
-
-            var video_width = jQuery("#pyd_vimeo_video_width").val();
-
-            var video_height = jQuery("#pyd_vimeo_video_height").val();
-
-            parent.send_to_editor("[pydvimeovideos " + album_id + video_id + video_title + album_title + " iconsize=\"" + icon_size + "\" iconfloat=\"" + icon_float + "\" vidwidth=\"" + video_width + "\" vidheight=\"" + video_height + "\" ]");
-        }
-    </script>
-
-    <div id="pyd_vimeo_videos_form">
-        <div class="wrap">
-            <div>
-                <div style="padding:15px 15px 0 15px;">
-                    <h3 style="color:#5A5A5A!important; font-family:Georgia,Times New Roman,Times,serif!important; font-size:1.8em!important; font-weight:normal!important;"><?php _e( "Insert Vimeo Videos", "pyd" ); ?></h3>
-                    <span>
-                        <?php _e( "Select the options below to display your Vimeo Videos on this page.", "pyd" ); ?>
-                    </span>
-                </div>
-                <div style="padding:15px 15px 0 15px;">
-
-                    <p>Display Videos From an Album<br />
-                        <select id="pyd_vimeo_video_album_id">
-                            <option value=""> Select the album to insert</option>
-                            <?php
-                            foreach ( $pyd_vimeo_album_ids as $pyd_vimeo_album_id ) {
-                                ?>
-                                <option value='albumid="<?php echo $pyd_vimeo_album_id[ 'id' ]; ?>"'><?php echo $pyd_vimeo_album_id[ 'title' ]; ?></option>
+                        <p>Display Videos From a Channel<br />
+                            <select id="pyd_vimeo_video_channel_id">
+                                <option value=""> Select the channel to insert</option>
                                 <?php
-                            }
-                            ?>
-                        </select>
-                    </p>
-
-                    <p><b>OR</b></p>
-
-                    <p>Display a Single Video<br />
-                        <select id="pyd_vimeo_video_id">
-                            <option value=""> Select the video to insert</option>
-                            <?php
-                            foreach ( $pyd_vimeo_video_ids as $pyd_vimeo_video_id ) {
+                                foreach ( $pyd_vimeo_channels_ids as $pyd_vimeo_channels_id ) {
+                                    ?>
+                                    <option value='channelid="<?php echo $pyd_vimeo_channels_id[ 'id' ]; ?>"'><?php echo $pyd_vimeo_channels_id[ 'name' ]; ?></option>
+                                    <?php
+                                }
                                 ?>
-                                <option value='videoid="<?php echo $pyd_vimeo_video_id[ 'id' ]; ?>"'><?php echo $pyd_vimeo_video_id[ 'title' ]; ?></option>
+                            </select>
+                        </p>
+
+                        <p><b>OR</b></p>
+
+                        <p>Display Videos From an Album<br />
+                            <select id="pyd_vimeo_video_album_id">
+                                <option value=""> Select the album to insert</option>
                                 <?php
-                            }
-                            ?>
-                        </select>
-                    </p>
+                                foreach ( $pyd_vimeo_album_ids as $pyd_vimeo_album_id ) {
+                                    ?>
+                                    <option value='albumid="<?php echo $pyd_vimeo_album_id[ 'id' ]; ?>"'><?php echo $pyd_vimeo_album_id[ 'title' ]; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </p>
 
-                    <hr />
-                    <p>Display Album or Gallery Title:
-                        <select id="pyd_vimeo_video_album_title">
-                            <option value=' albumtitle="1"'> Yes</option>
-                            <option value=''> No</option>
-                        </select>
-                    </p>
+                        <p><b>OR</b></p>
 
-                    <p>Display Video Title:
-                        <select id="pyd_vimeo_video_title">
-                            <option value=' vidtitle="1"'> Yes</option>
-                            <option value=''> No</option>
-                        </select>
-                    </p>
+                        <p>Display a Single Video<br />
+                            <select id="pyd_vimeo_video_id">
+                                <option value=""> Select the video to insert</option>
+                                <?php
+                                foreach ( $pyd_vimeo_video_ids as $pyd_vimeo_video_id ) {
+                                    ?>
+                                    <option value='videoid="<?php echo $pyd_vimeo_video_id[ 'id' ]; ?>"'><?php echo $pyd_vimeo_video_id[ 'title' ]; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </p>
 
-                    <p>Display Icon Size:
-                        <select id="pyd_vimeo_video_icon">
-                            <option value="video_thumbnail_medium"> Select an icon size</option>
-                            <option value="video_thumbnail_small"> Small </option>
-                            <option value="video_thumbnail_medium"> Medium </option>
-                            <option value="video_thumbnail_large"> Large </option>
-                        </select>
-                    </p>
+                        <hr />
+                        <p>Display Album or Gallery Title:
+                            <select id="pyd_vimeo_video_album_title">
+                                <option value=' albumtitle="1"'> Yes</option>
+                                <option value=''> No</option>
+                            </select>
+                        </p>
 
-                    <p>Display Icon Float:
-                        <select id="pyd_vimeo_video_icon_float">
-                            <option value=""> Select direction to float icon</option>
-                            <option value="pyd_left"> Left </option>
-                            <option value="pyd_right"> Right </option>
-                            <option value="pyd_none"> None </option>
-                        </select>
-                    </p>
+                        <p>Display Video Title:
+                            <select id="pyd_vimeo_video_title">
+                                <option value=' vidtitle="1"'> Yes</option>
+                                <option value=''> No</option>
+                            </select>
+                        </p>
 
-                    <p>Playback Window Size: <br />
-                       Width: <input size="6" type="text" id="pyd_vimeo_video_width" value="500" />
-                       Height: <input size="6" type="text" id="pyd_vimeo_video_height" value="281" />
-                    </p>
+                        <p>Display Icon Size:
+                            <select id="pyd_vimeo_video_icon">
+                                <option value="video_thumbnail_medium"> Select an icon size</option>
+                                <option value="video_thumbnail_small"> Small </option>
+                                <option value="video_thumbnail_medium"> Medium </option>
+                                <option value="video_thumbnail_large"> Large </option>
+                            </select>
+                        </p>
 
-                </div>
-                <div style="padding:15px;">
-                    <input type="button" class="button-primary" value="Insert Vimeo Videos"
-                           onclick="pydvimeoinsertshort();" />&nbsp;&nbsp;&nbsp;
-                    <a class="button" style="color:#bbb;" href="#"
-                       onclick="tb_remove(); return false;"><?php _e( "Cancel", "pyd" ); ?></a>
+                        <p>Display Icon Float:
+                            <select id="pyd_vimeo_video_icon_float">
+                                <option value="pyd_left"> Select direction to float icon</option>
+                                <option value="pyd_left"> Left </option>
+                                <option value="pyd_right"> Right </option>
+                                <option value="pyd_none"> None </option>
+                            </select>
+                        </p>
+
+                        <p>Playback Window Size: <br />
+                           Width: <input size="6" type="text" id="pyd_vimeo_video_width" value="500" />
+                           Height: <input size="6" type="text" id="pyd_vimeo_video_height" value="281" />
+                        </p>
+
+                    </div>
+                    <div style="padding:15px;">
+                        <input type="button" class="button-primary" value="Insert Vimeo Videos"
+                               onclick="pydvimeoinsertshort();" />&nbsp;&nbsp;&nbsp;
+                        <a class="button" style="color:#bbb;" href="#"
+                           onclick="tb_remove(); return false;"><?php _e( "Cancel", "pyd" ); ?></a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <?php
     }
