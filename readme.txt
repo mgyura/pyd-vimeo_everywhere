@@ -47,35 +47,9 @@ No.  There are many great plugins that work with other photo services.  Our aim 
 == Changelog ==
 
 = 1.05 =
-* Fixed conflicts with other SmugMug plugins using phpsmug
-
-= 1.04 =
-* Added a new link to allow visitors to buy your images
-* Bug fixes
-
-= 1.03 =
-* Activation bug fix
-* Class name change to avoid conflicts
-
-= 1.02 =
-*Bug fix.  Deletion of print_r line that was left in for debugging.
-
-= 1.01 =
-* Initial release
+* Public release
 
 == Upgrade Notice ==
 
 = 1.05 =
-Fixed conflicts with other SmugMug plugins using phpsmug
-
-= 1.04 =
-New link selection that allows your users to buy photos.  bug fixes
-
-= 1.03 =
-Activation and class name bug fix.
-
-= 1.02 =
-Bug fix.  Minor issue with a print_r line left in final version.  This update deletes the code.
-
-= 1.01 =
-First tested release.
+First release of plugin
