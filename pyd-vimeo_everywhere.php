@@ -97,12 +97,12 @@
     function pyd_vimeo_albums_showMessage() {
         global $pyd_vimeo_user_data;
         if ( $pyd_vimeo_user_data[ 'username' ] == null ) {
-            echo '<div id="message" class="error"><p><strong>The Vimeo Videos plugin needs to be linked with an account.  Please <a href="/wp-admin/options-general.php?page=vimeovideos-settings" title="authorize Vimeo Videos">click here</a> to add your Vimeo user name</strong></p></div>';
+            echo '<div id="message" class="error"><p><strong>The Vimeo Everywhere plugin needs to be linked with an account.  Please <a href="/wp-admin/options-general.php?page=vimeovideos-settings" title="authorize Vimeo Everywhere">click here</a> to add your Vimeo user name</strong></p></div>';
         }
     }
 
     function pyd_vimeo_albums_showAdminMessages() {
-        pyd_vimeo_albums_showMessage( "The Vimeo Videos plugin needs to be linked with an account.", true );
+        pyd_vimeo_albums_showMessage( "The Vimeo Everywhere plugin needs to be linked with an account.", true );
     }
 
     add_action( 'admin_notices', 'pyd_vimeo_albums_showAdminMessages' );

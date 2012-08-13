@@ -29,7 +29,7 @@
                 </tr>
 
                 <tr valign="top">
-                    <th scope="row">Admin Video Display Title</th>
+                    <th scope="row">Dashboard Video Display Title</th>
                     <td>
                         <input type="text" name="pyd_vimeo_videos[title]" value="<?php echo $pyd_vimeo_user_data[ 'title' ]; ?>" /><br />
                         <small>What would you like the link on the dashboard menu to be?</small>
@@ -37,7 +37,7 @@
                 </tr>
 
                 <tr valign="top">
-                    <th scope="row">Admin Video Dashboard Menu Location</th>
+                    <th scope="row">Video Dashboard Menu Location</th>
                     <td>
                         <select name="pyd_vimeo_videos[admin_menu]">
                             <option value="index.php" <?php if ( $pyd_vimeo_user_data[ 'admin_menu' ] == 'index.php' ) {
@@ -108,19 +108,22 @@
                     </td>
                 </tr>
             </table>
-            <hr />
-
-            <h2>Select the albums to show in <?php echo $pyd_vimeo_user_data[ 'title' ]; ?></h2>
 
             <?php
             if ( $pyd_vimeo_user_data[ 'username' ] != null ) {
+                ?>
+                <hr />
+
+                <h2>Select the albums to show in <?php echo $pyd_vimeo_user_data[ 'title' ]; ?></h2>
+                <?php
 
                 $pyd_vimeo_album_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_user_data[ 'username' ] . '/albums.php' ) );
 
                 echo '<div class="pyd_vimeo_checkboxes">';
                 foreach ( $pyd_vimeo_album_ids as $albumid => $albumvalue ) {
-                    ?>
-                    <div class="pyd_vimeo_checkbox">
+                    if ( $albumvalue ) {
+                        ?>
+                        <div class="pyd_vimeo_checkbox">
                         <input type="checkbox" name="pyd_vimeo_videos[admin_albums][<?php echo $albumvalue[ 'id' ] ?>]" id="<?php echo $albumvalue[ 'id' ] ?>" value="<?php echo $albumvalue[ 'id' ] ?>" <?php if ( isset( $pyd_vimeo_user_data[ 'admin_albums' ][ $albumvalue[ 'id' ] ] ) ) {
                             echo 'checked="checked"';
                         } ?> />
@@ -129,7 +132,11 @@
                         </label>
 
                     </div>
-                    <?php
+                        <?php
+                    }
+                    else {
+                        echo 'No public Vimeo albums found on your account.';
+                    }
                 }
                 echo '<div class="pydClear"></div></div>';
             }
@@ -152,7 +159,7 @@
     /*-----------------------------------------------------------------------------------*/
 
     function pyd_vimeo_album_settings_menu() {
-        add_submenu_page( 'options-general.php', 'Vimeo Videos', 'Vimeo Videos', 'edit_posts', 'vimeovideos-settings', 'pyd_vimeo_videos_option_settings' );
+        add_submenu_page( 'options-general.php', 'Vimeo Everywhere', 'Vimeo Everywhere', 'edit_posts', 'vimeovideos-settings', 'pyd_vimeo_videos_option_settings' );
     }
 
     add_action( 'admin_menu', 'pyd_vimeo_album_settings_menu' );
