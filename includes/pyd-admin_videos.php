@@ -45,7 +45,7 @@
             ?>
 
         <div class="wrap">
-        <h2><?php echo $pyd_vimeo_user_data[ 'title' ]; ?></h2>
+            <h2><?php echo $pyd_vimeo_user_data[ 'title' ]; ?></h2>
             <?php
 
             foreach ( $pyd_vimeo_admin_albums as $pyd_vimeo_album => $albums ) {
@@ -54,63 +54,63 @@
                     ?>
 
                     <div class="pyd_viemo_table">
-                    <h3><? echo $album; ?></h3>
-                    <table class="widefat">
-                        <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                        <h3><? echo $album; ?></h3>
+                        <table class="widefat">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                            <?php foreach ( $albumdata as $pyd_vimeo_vids ) {
+                                <?php foreach ( $albumdata as $pyd_vimeo_vids ) {
 
-                            $vimeo_date = date( "F d, Y", strtotime( $pyd_vimeo_vids[ 'upload_date' ] ) );
-                            $vimeo_mins = gmdate( "i:s", $pyd_vimeo_vids[ 'duration' ] );
-                            ?>
+                                $vimeo_date = date( "F d, Y", strtotime( $pyd_vimeo_vids[ 'upload_date' ] ) );
+                                $vimeo_mins = gmdate( "i:s", $pyd_vimeo_vids[ 'duration' ] );
+                                ?>
 
-                        <tr>
-                            <td class="pyd_vimeo_title">
+                            <tr>
+                                <td class="pyd_vimeo_title">
 
-                                <a href="#TB_inline?height=<?php echo $pyd_vimeo_user_data[ 'admin_vid_height' ]; ?>&amp;width=<?php echo $pyd_vimeo_user_data[ 'admin_vid_width' ]; ?>&amp;inlineId=<?php echo 'pyd_admin_vimeo_' . $pyd_vimeo_vids[ 'id' ]; ?>" title="<?php echo $pyd_vimeo_vids[ 'title' ]; ?>" class="thickbox">
-                                    <img src="<?php echo $pyd_vimeo_vids[ 'thumbnail_small' ]; ?>" alt="<?php echo $pyd_vimeo_vids[ 'title' ]; ?>" class="pyd_vimeo_icon" />
-                                </a>
-
-                                <p>
                                     <a href="#TB_inline?height=<?php echo $pyd_vimeo_user_data[ 'admin_vid_height' ]; ?>&amp;width=<?php echo $pyd_vimeo_user_data[ 'admin_vid_width' ]; ?>&amp;inlineId=<?php echo 'pyd_admin_vimeo_' . $pyd_vimeo_vids[ 'id' ]; ?>" title="<?php echo $pyd_vimeo_vids[ 'title' ]; ?>" class="thickbox">
-                                        <?php echo $pyd_vimeo_vids[ 'title' ]; ?>
+                                        <img src="<?php echo $pyd_vimeo_vids[ 'thumbnail_small' ]; ?>" alt="<?php echo $pyd_vimeo_vids[ 'title' ]; ?>" class="pyd_vimeo_icon" />
                                     </a>
-                                    <br />
-                                    Record date: <?php echo $vimeo_date; ?>
-                                    <br />
-                                    Duration: <?php echo $vimeo_mins; ?>
-                                </p>
 
-                            </td>
+                                    <p>
+                                        <a href="#TB_inline?height=<?php echo $pyd_vimeo_user_data[ 'admin_vid_height' ]; ?>&amp;width=<?php echo $pyd_vimeo_user_data[ 'admin_vid_width' ]; ?>&amp;inlineId=<?php echo 'pyd_admin_vimeo_' . $pyd_vimeo_vids[ 'id' ]; ?>" title="<?php echo $pyd_vimeo_vids[ 'title' ]; ?>" class="thickbox">
+                                            <?php echo $pyd_vimeo_vids[ 'title' ]; ?>
+                                        </a>
+                                        <br />
+                                        Record date: <?php echo $vimeo_date; ?>
+                                        <br />
+                                        Duration: <?php echo $vimeo_mins; ?>
+                                    </p>
 
-                            <td class="pyd_vimeo_desc">
-                                <?php echo $pyd_vimeo_vids[ 'description' ]; ?>
-                            </td>
+                                </td>
 
-                        </tr>
+                                <td class="pyd_vimeo_desc">
+                                    <?php echo $pyd_vimeo_vids[ 'description' ]; ?>
+                                </td>
 
-                        <div id="<?php echo 'pyd_admin_vimeo_' . $pyd_vimeo_vids[ 'id' ]; ?>" class="pyd_vimeo_video" style="display:none;">
-                            <iframe src="http://player.vimeo.com/video/<?php echo $pyd_vimeo_vids[ 'id' ]; ?>?title=0&amp;byline=0&amp;portrait=0&amp;wmode=transparent" width="<?php echo $pyd_vimeo_user_data[ 'admin_vid_width' ]; ?>" height="<?php echo $pyd_vimeo_user_data[ 'admin_vid_height' ]; ?>" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-                        </div>
+                            </tr>
 
-                            <?php } ?>
+                            <div id="<?php echo 'pyd_admin_vimeo_' . $pyd_vimeo_vids[ 'id' ]; ?>" class="pyd_vimeo_video" style="display:none;">
+                                <iframe src="http://player.vimeo.com/video/<?php echo $pyd_vimeo_vids[ 'id' ]; ?>?title=0&amp;byline=0&amp;portrait=0&amp;wmode=transparent" width="<?php echo $pyd_vimeo_user_data[ 'admin_vid_width' ]; ?>" height="<?php echo $pyd_vimeo_user_data[ 'admin_vid_height' ]; ?>" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                            </div>
 
-                        </tbody>
-                    </table>
+                                <?php } ?>
 
-                </div>
+                            </tbody>
+                        </table>
+
+                    </div>
                     <?php
                 }
             }
             ?>
 
-    </div>
+        </div>
         <?php
         }
 

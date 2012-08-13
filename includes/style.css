@@ -46,6 +46,13 @@ Michael Gyura of Poka Yoke Design
 
 }
 
+.pyd_notext .video_side_thumbnail_small {
+    width: 100px;
+    height: 75px;
+    margin: 0px;
+    padding: 3px;
+}
+
 .pyd_notext .video_thumbnail_medium {
     width: 200px;
     height: 150px;

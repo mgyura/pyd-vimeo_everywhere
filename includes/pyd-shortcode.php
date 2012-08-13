@@ -327,9 +327,9 @@
                 var channel_id = jQuery("#pyd_vimeo_video_channel_id").val();
 
                 if (album_id == "" && video_id == "" && channel_id == "" ) {
-                         alert("<?php _e( "Please either a gallery, album, or video to show", "pydnet" ) ?>");
-                         return;
-                     }
+                    alert("<?php _e( "Please either a gallery, album, or video to show", "pydnet" ) ?>");
+                    return;
+                }
 
                 var album_title = jQuery("#pyd_vimeo_video_album_title").val();
                 var video_title = jQuery("#pyd_vimeo_video_title").val();
