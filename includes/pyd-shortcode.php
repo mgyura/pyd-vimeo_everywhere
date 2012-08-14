@@ -326,7 +326,7 @@
                 var video_id = jQuery("#pyd_vimeo_video_id").val();
                 var channel_id = jQuery("#pyd_vimeo_video_channel_id").val();
 
-                if (album_id == "" && video_id == "" && channel_id == "" ) {
+                if (album_id == "" && video_id == "" && channel_id == "") {
                     alert("<?php _e( "Please either a gallery, album, or video to show", "pydnet" ) ?>");
                     return;
                 }
@@ -344,6 +344,9 @@
 
         <div id="pyd_vimeo_videos_form">
             <div class="wrap">
+
+                <?php if($pyd_vimeo_video_ids) { ?>
+
                 <div>
                     <div style="padding:15px 15px 0 15px;">
                         <h3 style="color:#5A5A5A!important; font-family:Georgia,Times New Roman,Times,serif!important; font-size:1.8em!important; font-weight:normal!important;"><?php _e( "Insert Vimeo Videos", "pyd" ); ?></h3>
@@ -353,6 +356,7 @@
                     </div>
                     <div style="padding:15px 15px 0 15px;">
 
+                        <?php if ( $pyd_vimeo_channels_ids ) { ?>
                         <p>Display Videos From a Channel<br />
                             <select id="pyd_vimeo_video_channel_id">
                                 <option value=""> Select the channel to insert</option>
@@ -367,7 +371,10 @@
                         </p>
 
                         <p><b>OR</b></p>
+                        <?php } ?>
 
+
+                        <?php if ( $pyd_vimeo_album_ids ) { ?>
                         <p>Display Videos From an Album<br />
                             <select id="pyd_vimeo_video_album_id">
                                 <option value=""> Select the album to insert</option>
@@ -382,6 +389,8 @@
                         </p>
 
                         <p><b>OR</b></p>
+                        <?php } ?>
+
 
                         <p>Display a Single Video<br />
                             <select id="pyd_vimeo_video_id">
@@ -442,6 +451,11 @@
                            onclick="tb_remove(); return false;"><?php _e( "Cancel", "pyd" ); ?></a>
                     </div>
                 </div>
+                    <?php }
+                else {
+                    echo 'You need to have public Vimeo videos on your account before they can be added';
+                }
+                ?>
             </div>
         </div>
     <?php

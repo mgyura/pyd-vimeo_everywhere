@@ -4,7 +4,7 @@ Donate link: http://gyura.com
 Tags: Vimeo, Videos, Video Training, Learning Center, Video Widget, Vimeo Shortcode, Video Dashboard
 Requires at least: 3.3
 Tested up to: 3.4
-Stable tag: 1.06
+Stable tag: 1.07
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,28 +31,33 @@ Display your public Vimeo videos, albums or channels on a WordPress website.  Us
 4. **Vimeo Album Display** - Using the shortcode generator you can drop in an album from your Vimeo account to any page or post.
 5. **Shortcode Options** - This is where you select what single video, album, or channel to display on your page.
 6. **Widget Options** - The widget settings.  For placing an album list on your sidebar.
+7. **Single Video in Content** - Use the shortcode generator to drop in a single video on your page.
 
 
 == Frequently Asked Questions ==
 
-= Do I need a SmugMug account? =
+= Do I need a Vimeo account? =
 
-Yes.  This plugin pulls in from the photos you upload to your SMugMug account.
+This plugin allows you to pull in from a public Vimeo account.  It can be yours or one you have permission to use.
 
-= Will this work with another photo service =
+= Is this plugin just for Vimeo =
 
-No.  There are many great plugins that work with other photo services.  Our aim is to give SmugMug photo users a way to tie in their favorite photos to WordPress
+Yes.
+
+= I can't see any of my videos =
+
+Make sure that your videos are public.  This plugin does not authenticate you as a user, so it only pulls in public videos from your account.
 
 = Where can I get more help or offer suggestions =
 
-[Visit the plugin website](http://gyura.com/smugmug-responsive-slider/ "SmugMug Responsive Slider")
+[Visit the plugin website](http://gyura.com/vimeo-everywhere/ "Vimeo Everywhere")
 
 == Changelog ==
 
-= 1.06 =
+= 1.07 =
 * Public release
 
 == Upgrade Notice ==
 
-= 1.06 =
+= 1.07 =
 First release of plugin

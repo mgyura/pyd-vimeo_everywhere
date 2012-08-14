@@ -29,6 +29,14 @@
                 </tr>
 
                 <tr valign="top">
+                    <th scope="row">Dashboard Video Vimeo Account Name</th>
+                    <td>
+                        <input type="text" name="pyd_vimeo_videos[dashboard_username]" value="<?php echo $pyd_vimeo_user_data[ 'dashboard_username' ]; ?>" /><br />
+                        <small>Only use if you want to pull in from a different account for your dashboard videos.  Leave blank if using the same account.</small>
+                    </td>
+                </tr>
+
+                <tr valign="top">
                     <th scope="row">Dashboard Video Display Title</th>
                     <td>
                         <input type="text" name="pyd_vimeo_videos[title]" value="<?php echo $pyd_vimeo_user_data[ 'title' ]; ?>" /><br />
@@ -117,11 +125,18 @@
                 <h2>Select the albums to show in <?php echo $pyd_vimeo_user_data[ 'title' ]; ?></h2>
                 <?php
 
-                $pyd_vimeo_album_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_user_data[ 'username' ] . '/albums.php' ) );
+
+                if ( $pyd_vimeo_user_data[ 'dashboard_username' ] == null ) {
+                    $pyd_vimeo_album_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_user_data[ 'username' ] . '/albums.php' ) );
+                }
+                else {
+                    $pyd_vimeo_album_ids = unserialize( file_get_contents( 'http://vimeo.com/api/v2/' . $pyd_vimeo_user_data[ 'dashboard_username' ] . '/albums.php' ) );
+
+                }
 
                 echo '<div class="pyd_vimeo_checkboxes">';
-                foreach ( $pyd_vimeo_album_ids as $albumid => $albumvalue ) {
-                    if ( $albumvalue ) {
+                if ( $pyd_vimeo_album_ids ) {
+                    foreach ( $pyd_vimeo_album_ids as $albumid => $albumvalue ) {
                         ?>
                         <div class="pyd_vimeo_checkbox">
                         <input type="checkbox" name="pyd_vimeo_videos[admin_albums][<?php echo $albumvalue[ 'id' ] ?>]" id="<?php echo $albumvalue[ 'id' ] ?>" value="<?php echo $albumvalue[ 'id' ] ?>" <?php if ( isset( $pyd_vimeo_user_data[ 'admin_albums' ][ $albumvalue[ 'id' ] ] ) ) {
@@ -134,10 +149,11 @@
                     </div>
                         <?php
                     }
-                    else {
-                        echo 'No public Vimeo albums found on your account.';
-                    }
                 }
+                else {
+                    echo 'No public Vimeo albums found on your account.';
+                }
+
                 echo '<div class="pydClear"></div></div>';
             }
             ?>

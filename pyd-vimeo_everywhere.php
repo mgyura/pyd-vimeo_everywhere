@@ -3,7 +3,7 @@
      Plugin Name: Vimeo Everywhere
      Plugin URI: http://pokayoke.co
      Description: Display your public Vimeo videos, albums or channels on a WordPress website.  Use the shortcode generator to place your videos on pages, post or custom post types.  Use the admin panel to place your videos in the dashboard (for example, make a learning center for your clients).  Use the widget to put a video list in the sidebar.
-     Version: 1.06
+     Version: 1.07
      Author: Michael Gyura
      Author URI: http://gyura.com
     */
@@ -139,11 +139,12 @@
 
         add_option(
             'pyd_vimeo_videos', array(
-                                     'username'         => '',
-                                     'title'            => 'Vimeo Videos',
-                                     'admin_vid_width'  => 703,
-                                     'admin_vid_height' => 395,
-                                     'admin_menu' => 'upload.php',
+                                     'username'           => '',
+                                     'dashboard_username' => '',
+                                     'title'              => 'Vimeo Videos',
+                                     'admin_vid_width'    => 703,
+                                     'admin_vid_height'   => 395,
+                                     'admin_menu'         => 'upload.php',
                                 )
         );
     }
