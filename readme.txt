@@ -12,7 +12,7 @@ Display your public Vimeo videos on your WordPress website via shortcode, widget
 
 == Description ==
 
-Display your public Vimeo videos, albums or channels on a WordPress website.  Use the shortcode generator to place your videos on pages, post or custom post types.  Use the admin panel to place your videos in the dashboard (for example, make a learning center for your clients).  Use the widget to put a video list in the sidebar.
+Display your public Vimeo videos, albums or channels on a WordPress website.  Use the shortcode generator to place your videos on pages, posts or custom post types.  Use the admin panel to place your videos in the dashboard (for example, make a learning center for your clients).  Use the widget to put a video list in the sidebar.
 
 
 == Installation ==
